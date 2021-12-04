@@ -1,0 +1,22 @@
+$bg=#8EC5FC
+$color= var(--main-6)
+$colorHover=#f56c6c
+$warning=var(--main-5)
+$fuzzy=#ffed60
+ellipsis()
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
+routeHover()
+    background-image:linear-gradient(270deg, var(--main-8), var(--main-6));
+    -webkit-background-clip: text;
+    -webkit-box-decoration-break: clone;
+    -webkit-text-fill-color: transparent;
+    transition all .6s
+
+acitve()
+    font-weight: 700;
+    background-image: linear-gradient(90deg, var(--main-6), var(--main-8));
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    box-decoration-break: clone;

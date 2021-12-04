@@ -1,0 +1,4 @@
+// 生产环境
+NODE_ENV=production
+VUE_APP_API_URL =https://api.yunmobai.cn/api/v1
+VUE_APP_HOME_URL = https://www.yunmobai.cn

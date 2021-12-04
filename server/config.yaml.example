@@ -1,0 +1,60 @@
+system:
+  env: public
+  addr: 8008
+  protocol: http://
+  db-type: mysql
+  oss-type: aliyun-oss
+  use-multipoint: false
+  page-size: 10
+mysql:
+  path: 127.0.0.1:3306
+  config: charset=utf8mb4&parseTime=True&loc=Local
+  db-name: yours
+  username: yours
+  password: yours
+  prefix: ""
+  max-idle-conns: 0
+  max-open-conns: 0
+  log-mode: ""
+  log-zap: true
+redis:
+  db: 0
+  addr: 127.0.0.1:6379
+  password: ""
+captcha:
+  key-long: 6
+  img-width: 240
+  img-height: 80
+jwt:
+  expires-time: 604800
+  signing-key: yours
+zap:
+  level: info
+  format: console
+  prefix: '[github.com/wenknow/gin-vue-blog/server]'
+  director: log
+  link-name: latest_log
+  showLine: true
+  encode-level: LowercaseColorLevelEncoder
+  stacktrace-key: stacktrace
+  log-in-console: true
+excel:
+  dir: ./resource/excel/
+email:
+  port: 465
+  sender: yours
+  host: yours
+  is-ssl: true
+  secret: yours
+  name: wenknow
+local:
+  path: uploads/file
+encrypt:
+  register-key: yours
+aliyun-oss:
+  endpoint: yours
+  access-key-id: yours
+  access-key-secret: yours
+  bucket-name: yours
+  bucket-url: yours
+  base-path: yours

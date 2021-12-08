@@ -22,7 +22,7 @@ instance.interceptors.response.use(function(response) {
         } else if(response.data.code === 600){
             store.dispatch('logOut');
             Notification.error({
-                message: '登录信息错误',
+                message: '登录信息错误或过期',
                 description: response.data.msg,
             })
         } else {

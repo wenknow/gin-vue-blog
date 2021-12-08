@@ -3,7 +3,7 @@ const IS_PROD = process.env.NODE_ENV === 'production';
 module.exports = {
     // 由于部分插件，导致ie下空白
     transpileDependencies: ['vue-savedata', 'vue-baberrage'],
-    publicPath: './',
+    publicPath: '/',
     // 输出目录，
     outputDir: 'dist',
     //多页面配置
@@ -41,16 +41,6 @@ module.exports = {
         };
 
         if (IS_PROD) {
-
-            //gzip压缩
-            // config.plugins.push(new CompressionWebpackPlugin({
-            //     algorithm: 'gzip',
-            //     test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'), //匹配文件名
-            //     threshold: 10240, //对超过10k的数据进行压缩
-            //     minRatio: 0.8,
-            //     deleteOriginalAssets: false //是否删除原文件
-            // }));
-
             // 代码压缩
             config.optimization.minimizer[0].options.terserOptions.compress.warnings = false
             config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true

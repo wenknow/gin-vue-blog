@@ -61,9 +61,15 @@ export default {
       }
     }
   },
-  created() {
-    this.getAuthorInfo();
+  watch: {
+    uid: {
+      handler: function () {
+        this.getCgList();
+      },
+      deep: true,
+    },
   },
+
   methods:{
     submitArticleCgDialog(id, name){
       this.dialogEditVisible = true;
@@ -74,21 +80,21 @@ export default {
       this.dialogDelVisible = true;
       this.delCgId = id;
     },
-    getAuthorInfo() {
-     http.post("/apis/blog/cg/list", {uid:this.uid}).then((res) => {
-        this.cgList = res
+    getCgList() {
+      http.post("/apis/blog/cg/list", {uid:this.uid}).then((res) => {
+        this.cgList = res;
       });
     },
     async editMyArticleCg() {
       await http.post("/apis/blog/cg/update",this.editFrom).then(() => {
         this.dialogEditVisible = false;
-        this.getAuthorInfo();
+        this.getCgList();
       });
     },
     async delMyArticleCg() {
       await http.post("/apis/blog/cg/del", {id:this.delCgId}).then(() => {
         this.dialogDelVisible = false;
-        this.getAuthorInfo();
+        this.getCgList();
       });
     },
   }

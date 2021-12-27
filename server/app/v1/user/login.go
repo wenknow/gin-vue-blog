@@ -9,6 +9,7 @@ import (
 	"github.com/wenknow/gin-vue-blog/server/model/request"
 	"github.com/wenknow/gin-vue-blog/server/model/response"
 	"github.com/wenknow/gin-vue-blog/server/utils/email"
+	"github.com/wenknow/gin-vue-blog/server/utils/httpreq"
 	"github.com/wenknow/gin-vue-blog/server/utils/random"
 	"github.com/wenknow/gin-vue-blog/server/utils/redisdb"
 	"github.com/wenknow/gin-vue-blog/server/utils/verify"
@@ -126,6 +127,44 @@ func (loginApi *LoginApi) SendEmailCode(c *gin.Context) {
 		return
 	}
 	response.Ok(c)
+}
+
+func (loginApi *LoginApi) GithubLogin(c *gin.Context) {
+	var req request.GitHubLoginReq
+	_ = c.ShouldBindJSON(&req)
+	if err := verify.Validate.Struct(req); err != nil {
+		response.FailWithMsg(verify.Translate(err), nil, c)
+		return
+	}
+	//获取token
+	param := make(map[string]string)
+	header := make(map[string]string)
+	header["Accept"] = "application/json"
+	url := global.CONFIG.GithubLogin.AuthUrl
+	param["client_id"] = global.CONFIG.GithubLogin.ClientId
+	param["client_secret"] = global.CONFIG.GithubLogin.ClientSecret
+	param["code"] = req.Code
+	res, err := httpreq.PostJsonByHeader(url, param, header)
+	if err != nil {
+		response.FailWithMsg("github登录授权失败", err, c)
+		return
+	}
+	token, ok := res["access_token"]
+	if !ok {
+		response.FailWithMsg("获取用户token失败", err, c)
+		return
+	}
+	//根据token获取登录信息
+	url = global.CONFIG.GithubLogin.UserUrl
+	header["User-Agent"] = "wenknow"
+	header["Authorization"] = "token " + token
+	res, err = httpreq.GetByHeader(url, header)
+	if err != nil {
+		response.FailWithMsg("获取用户信息失败", err, c)
+		return
+	}
+
+	response.OkWithData(res, c)
 }
 
 //登录页面验证码

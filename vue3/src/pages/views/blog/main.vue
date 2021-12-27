@@ -135,9 +135,6 @@ export default {
     const { count } = getBlogInfo();
     const route = useRoute();
     const name = route.name;
-    const authorInfo = {
-      name:"11212"
-    };
     getBlog();
     getTag();
     const getBlogTo = () => {
@@ -182,7 +179,6 @@ export default {
       page_num,
       page_size,
       all_num,
-      authorInfo,
       getUrl
     };
   },

@@ -107,7 +107,7 @@ export default {
       breaks: true,
     };
     const logo="https://p.pstatp.com/origin/137d10002a95149f1fef7"
-    const desc="Baymax•记录美好学习时光，分享学习点点滴滴"
+    const desc="wenknow•记录美好学习时光，分享学习点点滴滴"
     const getArticle = () => {
       myLoading.value=true;
       http.post("/apis/blog/detail",{id:article_id.value})

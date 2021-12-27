@@ -132,9 +132,8 @@ export default {
     const searchArticles = (keyword) =>{
       router.push("/?search="+keyword);
     };
-    const routeChange = (val, oldVal) => {
-      console.log(oldVal.name);
-      if (val.name == "BlogEdit"){
+    const routeChange = (val) => {
+      if (val.name === "BlogEdit"){
         state.isShowNav = false;
         state.isShowFooter = false;
       }
@@ -147,7 +146,7 @@ export default {
       // }
     };
     onMounted(() => {
-      routeChange(route, route);
+      routeChange(route);
     });
     const store = useStore();
     const section = [
@@ -225,7 +224,8 @@ export default {
       store.commit('showLogin')
     }
     const logOut=()=>{
-      store.dispatch('logOut')
+      store.dispatch('logOut');
+      window.location.reload();
     }
     return {
       section,

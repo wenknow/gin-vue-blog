@@ -1,4 +1,4 @@
-package http
+package httpreq
 
 import (
 	"bytes"
@@ -12,7 +12,7 @@ import (
 
 var client = &http.Client{Timeout: 5 * time.Second}
 
-func PostForm(data map[string]string, urlPath string) ([]byte, error) {
+func PostForm(urlPath string, data map[string]string) (string, error) {
 
 	postData := url.Values{}
 
@@ -23,15 +23,15 @@ func PostForm(data map[string]string, urlPath string) ([]byte, error) {
 	resp, err := client.PostForm(urlPath, postData)
 
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	defer resp.Body.Close()
 
 	result, _ := ioutil.ReadAll(resp.Body)
-	return result, nil
+	return string(result), nil
 }
 
-func PostFormByHeader(urlPath string, data map[string]string, header map[string]string) ([]byte, error) {
+func PostFormByHeader(urlPath string, data map[string]string, header map[string]string) (string, error) {
 
 	postData := url.Values{}
 
@@ -48,57 +48,60 @@ func PostFormByHeader(urlPath string, data map[string]string, header map[string]
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
-	return body, nil
+	return string(body), nil
 }
 
-func PostJson(urlPath string, data map[string]string) ([]byte, error) {
+func PostJson(urlPath string, data map[string]string) (res map[string]string, err error) {
 
 	bytesData, _ := json.Marshal(data)
 	req, _ := http.NewRequest("POST", urlPath, bytes.NewReader(bytesData))
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return res, err
 	}
-	body, _ := ioutil.ReadAll(resp.Body)
-	return body, nil
+	body, err := ioutil.ReadAll(resp.Body)
+	err = json.Unmarshal(body, &res)
+	return res, err
 }
 
-func PostJsonByHeader(urlPath string, data map[string]string, header map[string]string) ([]byte, error) {
+func PostJsonByHeader(urlPath string, data map[string]string, header map[string]string) (res map[string]string, err error) {
 
 	bytesData, _ := json.Marshal(data)
 	req, _ := http.NewRequest("POST", urlPath, bytes.NewReader(bytesData))
 
-	req.Header.Add("Content-Type", "application/json; charset=utf-8")
+	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	for k, v := range header {
 		req.Header.Set(k, v)
 	}
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return res, err
 	}
-	body, _ := ioutil.ReadAll(resp.Body)
-	return body, nil
+	body, err := ioutil.ReadAll(resp.Body)
+	err = json.Unmarshal(body, &res)
+	return res, err
 }
 
 //发送get请求
-func Get(urlPath string) ([]byte, error) {
+func Get(urlPath string) (res map[string]string, err error) {
 
 	resp, err := http.Get(urlPath)
 	if err != nil {
-		return nil, err
+		return res, err
 	}
 	defer resp.Body.Close()
-	result, _ := ioutil.ReadAll(resp.Body)
-	return result, nil
+	body, _ := ioutil.ReadAll(resp.Body)
+	err = json.Unmarshal(body, &res)
+	return res, err
 }
 
 //发送get请求 并把参数拼接到url上
-func GetByParam(urlPath string, param map[string]string) ([]byte, error) {
+func GetByParam(urlPath string, param map[string]string) (res map[string]string, err error) {
 
 	params := url.Values{}
 	Url, _ := url.Parse(urlPath)
@@ -112,16 +115,17 @@ func GetByParam(urlPath string, param map[string]string) ([]byte, error) {
 
 	resp, err := http.Get(urlPath)
 	if err != nil {
-		return nil, err
+		return res, err
 	}
 
 	defer resp.Body.Close()
-	result, _ := ioutil.ReadAll(resp.Body)
-	return result, nil
+	body, _ := ioutil.ReadAll(resp.Body)
+	err = json.Unmarshal(body, &res)
+	return res, err
 }
 
 //发送get请求和请求头
-func GetByHeader(urlPath string, header map[string]string) ([]byte, error) {
+func GetByHeader(urlPath string, header map[string]string) (res map[string]string, err error) {
 
 	req, _ := http.NewRequest("GET", urlPath, nil)
 
@@ -131,9 +135,10 @@ func GetByHeader(urlPath string, header map[string]string) ([]byte, error) {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return res, err
 	}
 	defer resp.Body.Close()
-	result, _ := ioutil.ReadAll(resp.Body)
-	return result, nil
+	body, _ := ioutil.ReadAll(resp.Body)
+	err = json.Unmarshal(body, &res)
+	return res, err
 }

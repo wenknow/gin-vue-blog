@@ -17,6 +17,7 @@ func (a *ApiRouter) UserRouter(Router *gin.RouterGroup) {
 		apiRouter.POST("logout", loginApi.Logout)               // 退出登录
 		apiRouter.POST("sendEmailCode", loginApi.SendEmailCode) // 发送邮箱验证码
 		apiRouter.POST("author", userApi.GetAuthorInfo)         // 获取作者信息
+		apiRouter.POST("githubLogin", loginApi.GithubLogin)     // 获取作者信息ff47a0980fa5605308f09de15835ebde3fdd1eff
 		apiRouterLogin.POST("info", userApi.GetUserInfo)        // 获取用户信息
 	}
 

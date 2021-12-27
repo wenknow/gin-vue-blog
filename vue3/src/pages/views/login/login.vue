@@ -214,9 +214,11 @@ export default {
       submit();
     };
     const partyLogin = (type) => {
-      let githubUrl =
-        process.env.VUE_APP_API_URL + "/login/" + type + "/redirect";
-      window.location.href = githubUrl;
+      let url ='';
+      if (type === 'github'){
+        url = 'https://github.com/login/oauth/authorize?client_id=843089d866f8cab6d455';
+      }
+      window.location.href = url;
       localStorage.setItem("current_page", route.path);
     };
     const mVisible = computed(() => store.state.index.loginShow);

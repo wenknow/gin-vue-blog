@@ -186,7 +186,6 @@
         });
       };
       const handleTabClick = (tab) =>{
-        console.log(tab.props.name);
         state.list= [];
         state.page_num = 0;
         state.params.cg_id = 0;
@@ -221,7 +220,9 @@
       watch(
         () => route.query,
         () => {
-          if (state.route_name == "Center") {
+          state.params.uid = parseInt(route.params.id, 10);
+          state.params.cg_id = parseInt(route.query.cg_id, 10);
+          if (route.name === "Center") {
             state.page_num = 0;
             state.page_size = 10;
             state.all_num = 1;

@@ -83,6 +83,15 @@ const routes = [
         }
     },
     {
+        path: '/auth',
+        name: 'Auth',
+        component: () =>
+            import ('../views/auth/main.vue'),
+        meta: {
+            title: '第三方登录-' + name,
+        }
+    },
+    {
         // 会匹配所有路径
         path: '/:pathMatch(.*)*',
         name: 'Windmill',

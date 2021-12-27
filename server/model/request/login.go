@@ -20,3 +20,7 @@ type RegisterCodeReq struct {
 type SendEmailCodeReq struct {
 	Email string `json:"email" validate:"required,email" label:"邮箱地址"`
 }
+
+type GitHubLoginReq struct {
+	Code string `json:"code" validate:"required" label:"编码"`
+}

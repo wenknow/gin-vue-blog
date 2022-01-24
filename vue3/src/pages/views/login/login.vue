@@ -184,11 +184,12 @@ export default {
 
     const submit = async () =>{
       state.btnLoading = true;
-      await http.post("/apis/user/login", state.params).then(function(res) {
+      http.post("/apis/user/login", state.params).then(function(res) {
           state.btnLoading = false;
           store.dispatch("setToken", res.token);
           store.dispatch("userInfo", res.user);
           close();
+          window.location.reload();
       });
     };
     const handleOk = ()=> {

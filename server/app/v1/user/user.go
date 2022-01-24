@@ -29,11 +29,11 @@ func (u *UserApi) GetAuthorInfo(c *gin.Context) {
 		response.FailWithMsg(verify.Translate(err), nil, c)
 		return
 	}
-	articleUserInfo, err := articleService.GetArticleGroupByUid(req.Id)
+	authorInfo, err := articleService.GetAuthorInfo(req.Id)
 	if err != nil && err != response.ErrNoRecord {
 		response.FailWithMsg("获取用户文章信息失败", err, c)
 		return
 	}
 
-	response.OkWithData(articleUserInfo, c)
+	response.OkWithData(authorInfo, c)
 }

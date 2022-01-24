@@ -12,6 +12,15 @@ import (
 type ArticleService struct {
 }
 
+func (u *ArticleService) GetAuthorInfo(uid uint) (articleInfo response.ArticleGroupByUserInfo, err error) {
+	err = global.DB.Table("user A").Select("A.id, A.name, A.head_url, A.desc,A.gender,"+
+		" count(B.id) as all_article_count, sum(B.browse_count) as all_browse_count, "+
+		"sum(B.good_count) as all_good_count, sum(B.collect_count) as all_collect_count, sum(B.comment_count) as all_comment_count").
+		Joins("left join article B on B.uid = A.id AND B.public_is = true").
+		Where("A.id", uid).Group("A.id").Take(&articleInfo).Error
+	return
+}
+
 func (u *ArticleService) GetArticleGroupByUid(uid uint) (articleInfo response.ArticleGroupByUserInfo, err error) {
 	err = global.DB.Table("article A").Select("B.id, B.name, B.head_url, B.desc,B.gender,"+
 		" count(A.id) as all_article_count, sum(A.browse_count) as all_browse_count, "+

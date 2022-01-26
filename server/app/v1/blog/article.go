@@ -446,76 +446,8 @@ func (articleApi *ArticleApi) GenerateTags(c *gin.Context) {
 
 }
 
-func (articleApi *ArticleApi) GetMusicList(c *gin.Context) {
-
-	m := make(map[string]string)
-	var res []interface{}
-	m["music_id"] = "1474400749000"
-	m["name"] = "12"
-	m["title"] = "1212"
-	m["type"] = "32323"
-	res = append(res, m)
-	m["music_id"] = "1474400749001"
-	res = append(res, m)
-	m["music_id"] = "1474400749002"
-	res = append(res, m)
-	response.OkWithData(res, c)
-
-}
-
-func (articleApi *ArticleApi) GetMsgList(c *gin.Context) {
-
-	m := make(map[string]string)
-	var res []interface{}
-	m["id"] = "1"
-	m["content"] = "234234234"
-	m["logo"] = "1212"
-	m["title"] = "32323"
-	m["type"] = "0"
-	m["updated_at"] = "2020-12-26T02:33:46"
-	res = append(res, m)
-	m["id"] = "23"
-	res = append(res, m)
-	m["id"] = "33"
-	res = append(res, m)
-	response.OkWithData(res, c)
-
-}
-
-func (articleApi *ArticleApi) GetClassList(c *gin.Context) {
-
-	m := make(map[string]string)
-	var res []interface{}
-	m["classty"] = "前端"
-	res = append(res, m)
-	m["classty"] = "后端"
-	res = append(res, m)
-	m["classty"] = "客户端"
-	res = append(res, m)
-	response.OkWithData(res, c)
-
-}
-
-func (articleApi *ArticleApi) GetLabelList(c *gin.Context) {
-
-	var res []interface{}
-	res = append(res, "Blog")
-	res = append(res, "Vue")
-	res = append(res, "Gin")
-	response.OkWithData(res, c)
-
-}
-
 func (articleApi *ArticleApi) GetInfo(c *gin.Context) {
 
 	response.Ok(c)
-
-}
-
-func (articleApi *ArticleApi) Login(c *gin.Context) {
-
-	m := make(map[string]string)
-	m["token"] = "sdfsafsdfasdfsadfsafd"
-	response.OkWithData(m, c)
 
 }

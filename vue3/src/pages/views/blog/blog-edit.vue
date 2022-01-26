@@ -104,6 +104,7 @@
         window.location.replace("/blog");
       }
       state.params.id = parseInt(route.params.id, 10);
+      console.log(state.params);
       if (state.params.id){
         getArticleDetail();
       }
@@ -127,6 +128,9 @@
       };
       const autoSaveArticle = async () => {
 
+        if (state.params.title == "" &&  state.params.content == ""){
+          return ;
+        }
         state.autoSaveStatus = "保存中...";
         await http.post('/apis/blog/save',state.params).then(function(res) {
           if (res){

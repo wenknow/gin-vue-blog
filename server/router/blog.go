@@ -18,7 +18,7 @@ func (a *ApiRouter) ArticleRouter(Router *gin.RouterGroup) {
 	apiRouterNoLog := Router.Group("/blog").Use(middleware.JWTAuth())
 	apiRouterRaw := Router.Group("/blog")
 	{
-		apiRouterRaw.GET("info", articleApi.GetInfo) // 新增分类
+		apiRouterRaw.GET("info", articleApi.GetInfo)
 
 		apiRouterRaw.POST("list", articleApi.GetArticleList)               // 新增分类
 		apiRouterRaw.POST("detail", articleApi.GetArticleDetail)           // 新增分类

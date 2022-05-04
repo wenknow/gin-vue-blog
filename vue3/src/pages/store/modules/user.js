@@ -3,7 +3,7 @@ import Notification from '@/components/notification/index.js';
 
 const user = {
     state: {
-        user: '',
+        user: {},
         token: '',
     },
     mutations: {

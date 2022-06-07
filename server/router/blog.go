@@ -20,8 +20,8 @@ func (a *ApiRouter) ArticleRouter(Router *gin.RouterGroup) {
 	{
 		apiRouterRaw.GET("info", articleApi.GetInfo)
 
-		apiRouterRaw.POST("list", articleApi.GetArticleList)               // 新增分类
-		apiRouterRaw.POST("detail", articleApi.GetArticleDetail)           // 新增分类
+		apiRouterRaw.POST("list", articleApi.GetArticleList)               // 文章列表
+		apiRouterRaw.POST("detail", articleApi.GetArticleDetail)           // 文章详情
 		apiRouterRaw.POST("userList", articleApi.GetUserArticleList)       // 获取用户文章列表
 		apiRouterRaw.POST("relatedList", articleApi.GetRelatedArticleList) // 获取相关文章
 

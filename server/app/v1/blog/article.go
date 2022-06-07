@@ -350,6 +350,8 @@ func (articleApi *ArticleApi) PublishArticle(c *gin.Context) {
 			}
 		}
 	}
+	//更新文章标签
+	generateTags(article.ID)
 
 	//保存搜索数据
 	search := req.Title + contentStr
@@ -432,15 +434,7 @@ func (articleApi *ArticleApi) GenerateTags(c *gin.Context) {
 	cond := service.InitCond()
 	articleList, _ := articleService.GetArticleList(cond)
 	for _, article := range articleList {
-		list, _ := articleTagService.GetArticleTagListByArticleId(article.ID)
-		var s []string
-		for _, v := range list {
-			s = append(s, v.TagName)
-		}
-		n := repository.Article{}
-		n.ID = article.ID
-		n.Tags = strings.Join(s, ",")
-		_ = articleService.UpdateArticle(n)
+		generateTags(article.ID)
 	}
 	response.Ok(c)
 
@@ -450,4 +444,16 @@ func (articleApi *ArticleApi) GetInfo(c *gin.Context) {
 
 	response.Ok(c)
 
+}
+
+func generateTags(articleId uint) {
+	list, _ := articleTagService.GetArticleTagListByArticleId(articleId)
+	var s []string
+	for _, v := range list {
+		s = append(s, v.TagName)
+	}
+	n := repository.Article{}
+	n.ID = articleId
+	n.Tags = strings.Join(s, ",")
+	_ = articleService.UpdateArticle(n)
 }

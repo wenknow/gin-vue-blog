@@ -77,7 +77,7 @@ export default {
           return false
       })
       const avator=computed(()=>{
-          const user=store.state.user.user
+          const user=store.state.user.info
           if(user){
               return user.head_url
           }

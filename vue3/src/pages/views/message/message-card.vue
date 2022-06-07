@@ -112,7 +112,7 @@ export default {
     const commentID = ref("");
     const commentShow = ref(false);
     const store = useStore();
-    const user = computed(() => store.state.user.user);
+    const user = computed(() => store.state.user.info);
     // type:切换类型。id:切换id
     const show = (type, id) => {
       if (commentID.value != type + id) {

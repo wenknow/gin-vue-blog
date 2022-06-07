@@ -99,7 +99,7 @@
     const store = useStore();
     const route = useRoute();
     onMounted(() => {
-      state.userInfo = store.state.user.user;
+      state.userInfo = store.state.user.info;
       if (!state.userInfo){
         window.location.replace("/blog");
       }

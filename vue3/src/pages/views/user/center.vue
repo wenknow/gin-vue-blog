@@ -236,7 +236,7 @@
         state.route_name = route.name;
         state.params.uid = parseInt(route.params.id, 10);
         state.params.cg_id = parseInt(route.query.cg_id, 10);
-        if (store.state.user.user.id === state.params.uid){
+        if (store.state.user.info.id === state.params.uid){
           state.isAuthor = true;
         }
         getAuthorInfo();

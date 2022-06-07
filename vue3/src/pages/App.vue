@@ -191,7 +191,7 @@ export default {
       }
       return false
     });
-    const userInfo = computed(() => store.state.user.user);
+    const userInfo = computed(() => store.state.user.info);
 
     const handleAddArticleClick = () => {
       if (user.value){

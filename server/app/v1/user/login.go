@@ -3,6 +3,7 @@ package user
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/wenknow/gin-vue-blog/server/global"
@@ -169,6 +170,7 @@ func (loginApi *LoginApi) GithubLogin(c *gin.Context) {
 	header["User-Agent"] = "wenknow"
 	header["Authorization"] = "token " + token
 	info, err := httpreq.GetByHeader(url, header)
+	fmt.Println(string(info))
 	if err != nil {
 		response.FailWithMsg("获取用户信息失败", err, c)
 		return

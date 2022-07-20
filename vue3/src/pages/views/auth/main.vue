@@ -8,10 +8,12 @@
 <script>
     import {onMounted} from "vue";
     import { useRoute } from "vue-router";
+    import { useStore } from "vuex";
     import http from "@/utils/httpindex.js";
     export default {
     name:'Auth',
     setup(){
+        const store = useStore();
         const route = useRoute();
         const goAuthLogin = () => {
             let method = route.query.method;
@@ -19,6 +21,8 @@
             if (method === 'github'){
                 http.post('/apis/user/githubLogin',{code:code}).then(function(res) {
                     if (res){
+                        store.dispatch("setToken", res.token);
+                        store.dispatch("userInfo", res.user);
                         window.location.replace("/");
                     }
                 });

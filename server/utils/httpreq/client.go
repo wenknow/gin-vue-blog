@@ -31,7 +31,7 @@ func PostForm(urlPath string, data map[string]string) (string, error) {
 	return string(result), nil
 }
 
-func PostFormByHeader(urlPath string, data map[string]string, header map[string]string) (string, error) {
+func PostFormByHeader(urlPath string, data map[string]string, header map[string]string) (res map[string]string, err error) {
 
 	postData := url.Values{}
 
@@ -48,10 +48,11 @@ func PostFormByHeader(urlPath string, data map[string]string, header map[string]
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", err
+		return
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
-	return string(body), nil
+	err = json.Unmarshal(body, &res)
+	return
 }
 
 func PostJson(urlPath string, data map[string]string) (res map[string]string, err error) {
@@ -125,7 +126,7 @@ func GetByParam(urlPath string, param map[string]string) (res map[string]string,
 }
 
 //发送get请求和请求头
-func GetByHeader(urlPath string, header map[string]string) (res map[string]string, err error) {
+func GetByHeader(urlPath string, header map[string]string) ([]byte, error) {
 
 	req, _ := http.NewRequest("GET", urlPath, nil)
 
@@ -135,10 +136,9 @@ func GetByHeader(urlPath string, header map[string]string) (res map[string]strin
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return res, err
+		return nil, err
 	}
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
-	err = json.Unmarshal(body, &res)
-	return res, err
+	return body, err
 }

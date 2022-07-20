@@ -109,6 +109,7 @@ export default {
     },
   },
   setup() {
+    const store = useStore();
     const router = useRouter();
     const state = reactive({
       isShowNav: true,
@@ -148,7 +149,6 @@ export default {
     onMounted(() => {
       routeChange(route);
     });
-    const store = useStore();
     const section = [
       {
         title: "首页",

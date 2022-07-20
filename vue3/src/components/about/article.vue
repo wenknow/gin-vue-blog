@@ -1,7 +1,7 @@
 <template>
   <div class="about-article article-concise">
     <div class="about-article__title">相关文章</div>
-    <a v-for="item in list" :key="item.id" :href="'articleDetail?article_id='+ item.id" target="_blank">
+    <a v-for="item in list" :key="item.id" :href="'/blog/'+ item.id" target="_blank">
       <div class="article-item">
         <div class="article__title">{{ item.title }}</div>
         <div class="article__meta">

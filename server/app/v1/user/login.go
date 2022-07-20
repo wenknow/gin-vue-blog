@@ -1,10 +1,12 @@
 package user
 
 import (
+	"encoding/json"
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/wenknow/gin-vue-blog/server/global"
+	"github.com/wenknow/gin-vue-blog/server/model/dto"
 	"github.com/wenknow/gin-vue-blog/server/model/repository"
 	"github.com/wenknow/gin-vue-blog/server/model/request"
 	"github.com/wenknow/gin-vue-blog/server/model/response"
@@ -13,6 +15,7 @@ import (
 	"github.com/wenknow/gin-vue-blog/server/utils/random"
 	"github.com/wenknow/gin-vue-blog/server/utils/redisdb"
 	"github.com/wenknow/gin-vue-blog/server/utils/verify"
+	"strconv"
 	"time"
 )
 
@@ -69,6 +72,14 @@ func (loginApi *LoginApi) Login(c *gin.Context) {
 	}
 
 	//登录以后签发jwt
+	res := signJwt(user)
+
+	response.OkWithData(res, c)
+
+}
+
+func signJwt(user repository.User) response.LoginResponse {
+	//登录以后签发jwt
 	j := &verify.JWT{SigningKey: []byte(global.CONFIG.JWT.SigningKey)} // 唯一签名
 	claims := request.CustomClaims{
 		ID:       user.ID,
@@ -83,20 +94,18 @@ func (loginApi *LoginApi) Login(c *gin.Context) {
 	}
 	token, err := j.CreateToken(claims)
 	if err != nil {
-		response.FailWithMsg("获取token失败!", err, c)
-		return
+		return response.LoginResponse{}
 	}
 
 	if _, isOk := redisdb.Get(user.Username); !isOk {
 		redisdb.Set(user.Username, token, global.CONFIG.JWT.ExpiresTime)
 	}
 
-	response.OkWithData(response.LoginResponse{
+	return response.LoginResponse{
 		User:      user,
 		Token:     token,
 		ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
-	}, c)
-
+	}
 }
 
 func (loginApi *LoginApi) Logout(c *gin.Context) {
@@ -144,7 +153,7 @@ func (loginApi *LoginApi) GithubLogin(c *gin.Context) {
 	param["client_id"] = global.CONFIG.GithubLogin.ClientId
 	param["client_secret"] = global.CONFIG.GithubLogin.ClientSecret
 	param["code"] = req.Code
-	res, err := httpreq.PostJsonByHeader(url, param, header)
+	res, err := httpreq.PostFormByHeader(url, param, header)
 	if err != nil {
 		response.FailWithMsg("github登录授权失败", err, c)
 		return
@@ -158,13 +167,44 @@ func (loginApi *LoginApi) GithubLogin(c *gin.Context) {
 	url = global.CONFIG.GithubLogin.UserUrl
 	header["User-Agent"] = "wenknow"
 	header["Authorization"] = "token " + token
-	res, err = httpreq.GetByHeader(url, header)
+	info, err := httpreq.GetByHeader(url, header)
 	if err != nil {
 		response.FailWithMsg("获取用户信息失败", err, c)
 		return
 	}
+	githubUserInfo := dto.GithubUserInfo{}
+	_ = json.Unmarshal(info, &githubUserInfo)
 
-	response.OkWithData(res, c)
+	//判断邮箱是否注册，若没有则直接注册，若有则直接登录
+	username := strconv.Itoa(githubUserInfo.ID)
+	name := githubUserInfo.Name
+	if name == "" {
+		name = githubUserInfo.Login
+	}
+	user, err := userService.GetUserByUsername(username)
+	if err == response.ErrNoRecord {
+		//进行注册
+		user = repository.User{
+			Email:      githubUserInfo.Email,
+			Username:   username,
+			Name:       name,
+			HeadUrl:    githubUserInfo.AvatarURL,
+			ActivateIs: true,
+		}
+		if newId, err := userService.AddUser(user); err != nil {
+			response.FailWithMsg("添加用户出错", err, c)
+			return
+		} else {
+			user.ID = newId
+		}
+	} else if err != nil {
+		response.FailWithMsg(err.Error(), nil, c)
+		return
+	}
+
+	//登录以后签发jwt
+	res2 := signJwt(user)
+	response.OkWithData(res2, c)
 }
 
 //登录页面验证码

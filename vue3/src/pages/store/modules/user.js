@@ -42,8 +42,8 @@ const user = {
             commit('userInfo', data)
         },
         async logOut({ commit }) {
-            await http.post('/apis/user/logout');
             commit('logOut')
+            await http.post('/apis/user/logout');
         },
     }
 }

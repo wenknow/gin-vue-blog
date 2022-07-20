@@ -14,6 +14,7 @@ import (
 	"github.com/wenknow/gin-vue-blog/server/utils/httpreq"
 	"github.com/wenknow/gin-vue-blog/server/utils/random"
 	"github.com/wenknow/gin-vue-blog/server/utils/redisdb"
+	"github.com/wenknow/gin-vue-blog/server/utils/typeopt"
 	"github.com/wenknow/gin-vue-blog/server/utils/verify"
 	"strconv"
 	"time"
@@ -176,11 +177,8 @@ func (loginApi *LoginApi) GithubLogin(c *gin.Context) {
 	_ = json.Unmarshal(info, &githubUserInfo)
 
 	//判断邮箱是否注册，若没有则直接注册，若有则直接登录
-	username := strconv.Itoa(githubUserInfo.ID)
-	name := githubUserInfo.Name
-	if name == "" {
-		name = githubUserInfo.Login
-	}
+	username := typeopt.IfEmptyThen(githubUserInfo.Email, strconv.Itoa(githubUserInfo.ID))
+	name := typeopt.IfEmptyThen(githubUserInfo.Name, githubUserInfo.Login)
 	user, err := userService.GetUserByUsername(username)
 	if err == response.ErrNoRecord {
 		//进行注册

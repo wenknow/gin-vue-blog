@@ -9,3 +9,10 @@ func ReplaceStr(str string, re []string) string {
 	}
 	return str
 }
+
+func IfEmptyThen(old string, new string) string {
+	if old == "" {
+		return new
+	}
+	return old
+}
